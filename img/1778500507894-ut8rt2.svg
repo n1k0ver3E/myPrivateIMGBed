@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1180" width="1700" height="1180">
+  <style>
+    text { font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Courier New', 'Microsoft YaHei', 'SimHei', monospace; fill: #e2e8f0; }
+    .title { font-size: 26px; font-weight: 700; letter-spacing: 0.04em; }
+    .subtitle { font-size: 13px; fill: #94a3b8; letter-spacing: 0.02em; }
+    .participant { font-size: 14px; font-weight: 700; letter-spacing: 0.02em; }
+    .sub { font-size: 11px; fill: #94a3b8; }
+    .msg { font-size: 12px; letter-spacing: 0.02em; }
+    .note { font-size: 11px; letter-spacing: 0.02em; }
+    .frame-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; }
+    .scenario { font-size: 16px; font-weight: 700; letter-spacing: 0.1em; }
+  </style>
+
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f0f1a"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <marker id="aBlue" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><polygon points="0 0, 10 4, 0 8" fill="#3b82f6"/></marker>
+    <marker id="aOrange" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><polygon points="0 0, 10 4, 0 8" fill="#f97316"/></marker>
+    <marker id="aPurple" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><polygon points="0 0, 10 4, 0 8" fill="#a855f7"/></marker>
+    <marker id="aGreen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><polygon points="0 0, 10 4, 0 8" fill="#10b981"/></marker>
+    <marker id="aGray" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><polygon points="0 0, 10 4, 0 8" fill="#94a3b8"/></marker>
+  </defs>
+
+  <rect width="1700" height="1180" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="60" y="50" class="title" fill="#e2e8f0">▌Flow 3  ·  访谈进度 + 用户通知 (NATS Pub/Sub)</text>
+  <text x="60" y="74" class="subtitle">两个 NATS 解耦的经典用法 — 跨语言进程通信 &amp; 一对多 fan-out</text>
+  <path d="M 60 88 L 1640 88" stroke="#334155" stroke-width="1"/>
+
+  <!-- Participants (top boxes) -->
+  <!-- User A FE -->
+  <rect x="60" y="110" width="170" height="56" rx="6" ry="6" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="145" y="136" class="participant" text-anchor="middle">User A · FE</text>
+  <text x="145" y="155" class="sub" text-anchor="middle">sid = sidA</text>
+  <!-- User B FE -->
+  <rect x="290" y="110" width="170" height="56" rx="6" ry="6" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="375" y="136" class="participant" text-anchor="middle">User B · FE</text>
+  <text x="375" y="155" class="sub" text-anchor="middle">sid = sidB</text>
+  <!-- Backend -->
+  <rect x="620" y="110" width="220" height="56" rx="6" ry="6" fill="#1c1917" stroke="#f97316" stroke-width="1.5"/>
+  <text x="730" y="136" class="participant" text-anchor="middle">Backend (NestJS)</text>
+  <text x="730" y="155" class="sub" text-anchor="middle">CallStream / Message Svc</text>
+  <!-- NATS -->
+  <rect x="920" y="110" width="200" height="56" rx="6" ry="6" fill="#052e16" stroke="#10b981" stroke-width="1.5"/>
+  <text x="1020" y="136" class="participant" text-anchor="middle">NATS Broker</text>
+  <text x="1020" y="155" class="sub" text-anchor="middle">progress_update / USER_MESSAGE</text>
+  <!-- Voice Agent -->
+  <rect x="1210" y="110" width="200" height="56" rx="6" ry="6" fill="#1e1b4b" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="1310" y="136" class="participant" text-anchor="middle">Voice Agent</text>
+  <text x="1310" y="155" class="sub" text-anchor="middle">Python · LiveKit</text>
+  <!-- Event Handler -->
+  <rect x="1470" y="110" width="180" height="56" rx="6" ry="6" fill="#1c1917" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="1560" y="136" class="participant" text-anchor="middle">Event Handler</text>
+  <text x="1560" y="155" class="sub" text-anchor="middle">admin / publish</text>
+
+  <!-- Lifelines -->
+  <line x1="145"  y1="166" x2="145"  y2="1130" stroke="#475569" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="375"  y1="166" x2="375"  y2="1130" stroke="#475569" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="730"  y1="166" x2="730"  y2="1130" stroke="#475569" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="1020" y1="166" x2="1020" y2="1130" stroke="#475569" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="1310" y1="166" x2="1310" y2="1130" stroke="#475569" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="1560" y1="166" x2="1560" y2="1130" stroke="#475569" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- ============ SCENARIO 1 ============ -->
+  <rect x="40" y="190" width="1620" height="430" rx="6" ry="6" fill="#0a1f15" stroke="#10b981" stroke-width="1" stroke-dasharray="6 4" opacity="0.55"/>
+  <rect x="40" y="190" width="380" height="26" fill="#052e16" stroke="#10b981" stroke-width="1.5"/>
+  <text x="55" y="210" class="scenario" fill="#6ee7b7">▸ SCENARIO 1 · 访谈进度监控</text>
+  <text x="430" y="210" class="sub" fill="#94a3b8">跨语言进程：Python Agent → NATS → Node BE → 浏览器</text>
+
+  <!-- (1) User A FE → BE: GET /listen-study-progress -->
+  <rect x="139" y="232" width="12" height="370" fill="#1c1917" stroke="#f97316" stroke-width="0.5" opacity="0.7"/>
+  <path d="M 145 250 L 724 250" stroke="#3b82f6" stroke-width="1.8" fill="none" marker-end="url(#aBlue)"/>
+  <rect x="195" y="234" width="380" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="200" y="247" class="msg" fill="#93c5fd">[1] GET /call/listen-study-progress?sid=xxx (EventSource)</text>
+
+  <!-- (2) BE → NATS: subscribe -->
+  <path d="M 730 290 L 1014 290" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#aGreen)"/>
+  <rect x="745" y="274" width="270" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="750" y="287" class="msg" fill="#6ee7b7">[2] subscribe progress_update.{sid}</text>
+
+  <!-- (3) VA → NATS: publish (speaker agent) -->
+  <path d="M 1310 330 L 1026 330" stroke="#a855f7" stroke-width="1.8" fill="none" marker-end="url(#aPurple)"/>
+  <rect x="1050" y="314" width="250" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="1055" y="327" class="msg" fill="#d8b4fe">[3] publish {speaker:'agent',state}</text>
+
+  <!-- (4) NATS → BE: deliver -->
+  <path d="M 1020 370 L 736 370" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#aGreen)"/>
+  <rect x="790" y="354" width="200" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="795" y="367" class="msg" fill="#6ee7b7">[4] deliver</text>
+
+  <!-- (5) BE → User A FE: data event -->
+  <path d="M 724 410 L 151 410" stroke="#f97316" stroke-width="1.8" fill="none" marker-end="url(#aOrange)"/>
+  <rect x="200" y="394" width="340" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="205" y="407" class="msg" fill="#fdba74">[5] data: {speaker, state} → 头像动画</text>
+
+  <!-- (6) VA → NATS: publish (speaker user) -->
+  <path d="M 1310 460 L 1026 460" stroke="#a855f7" stroke-width="1.8" fill="none" marker-end="url(#aPurple)"/>
+  <rect x="1050" y="444" width="250" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="1055" y="457" class="msg" fill="#d8b4fe">[6] publish {speaker:'user',...}</text>
+
+  <!-- (7) NATS → BE deliver -->
+  <path d="M 1020 500 L 736 500" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#aGreen)"/>
+  <rect x="790" y="484" width="200" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="795" y="497" class="msg" fill="#6ee7b7">[7] deliver</text>
+
+  <!-- (8) BE → User A FE -->
+  <path d="M 724 540 L 151 540" stroke="#f97316" stroke-width="1.8" fill="none" marker-end="url(#aOrange)"/>
+  <rect x="200" y="524" width="340" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="205" y="537" class="msg" fill="#fdba74">[8] data: {speaker:'user'} → 切到用户头像</text>
+
+  <!-- NOTE: NATS 是必须的 -->
+  <rect x="920" y="570" width="540" height="34" rx="4" ry="4" fill="#052e16" stroke="#10b981" stroke-width="1" opacity="0.95"/>
+  <text x="1190" y="592" class="note" text-anchor="middle" fill="#a7f3d0">💡 NATS 是必须的：Python Agent 和 Node Backend 不同进程，靠 broker 通信</text>
+
+  <!-- ============ SCENARIO 2 ============ -->
+  <rect x="40" y="650" width="1620" height="440" rx="6" ry="6" fill="#1c0e1c" stroke="#a855f7" stroke-width="1" stroke-dasharray="6 4" opacity="0.55"/>
+  <rect x="40" y="650" width="380" height="26" fill="#1e1b4b" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="55" y="670" class="scenario" fill="#d8b4fe">▸ SCENARIO 2 · 用户通知 fan-out</text>
+  <text x="430" y="670" class="sub" fill="#94a3b8">一个业务事件 → 多个用户的 SSE 连接（按 sid 路由）</text>
+
+  <!-- (9) User A FE → BE: GET /listen-user -->
+  <path d="M 145 700 L 724 700" stroke="#3b82f6" stroke-width="1.8" fill="none" marker-end="url(#aBlue)"/>
+  <rect x="200" y="684" width="330" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="205" y="697" class="msg" fill="#93c5fd">[9] GET /message/listen-user?sid=sidA</text>
+
+  <!-- (10) User B FE → BE -->
+  <path d="M 375 740 L 724 740" stroke="#3b82f6" stroke-width="1.8" fill="none" marker-end="url(#aBlue)"/>
+  <rect x="395" y="724" width="320" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="400" y="737" class="msg" fill="#93c5fd">[10] GET /listen-user?sid=sidB</text>
+
+  <!-- (11) BE → NATS: subscribe x2 -->
+  <path d="M 730 780 L 1014 780" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#aGreen)"/>
+  <rect x="750" y="764" width="240" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="755" y="777" class="msg" fill="#6ee7b7">[11] subscribe USER_MESSAGE × 2</text>
+
+  <!-- (12) Event Handler → BE: study published -->
+  <path d="M 1560 820 L 736 820" stroke="#94a3b8" stroke-width="1.8" fill="none" marker-end="url(#aGray)"/>
+  <rect x="1100" y="804" width="380" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="1105" y="817" class="msg" fill="#cbd5e1">[12] Study published 事件 (addRootMessage)</text>
+
+  <!-- (13) BE → NATS publish sidA -->
+  <path d="M 730 860 L 1014 860" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#aGreen)"/>
+  <rect x="745" y="844" width="250" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="750" y="857" class="msg" fill="#6ee7b7">[13] publish {sid:sidA, type:'publish'}</text>
+
+  <!-- (14) BE → NATS publish sidB -->
+  <path d="M 730 900 L 1014 900" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#aGreen)"/>
+  <rect x="745" y="884" width="250" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="750" y="897" class="msg" fill="#6ee7b7">[14] publish {sid:sidB, type:'publish'}</text>
+
+  <!-- (15) NATS → BE deliver x2 -->
+  <path d="M 1020 940 L 736 940" stroke="#10b981" stroke-width="1.8" fill="none" marker-end="url(#aGreen)"/>
+  <rect x="790" y="924" width="200" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="795" y="937" class="msg" fill="#6ee7b7">[15] deliver × 2</text>
+
+  <!-- (16) BE → User A FE -->
+  <path d="M 724 980 L 151 980" stroke="#f97316" stroke-width="1.8" fill="none" marker-end="url(#aOrange)"/>
+  <rect x="200" y="964" width="340" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="205" y="977" class="msg" fill="#fdba74">[16] data: {type:'publish'} → 铃铛+1</text>
+
+  <!-- (17) BE → User B FE -->
+  <path d="M 724 1020 L 381 1020" stroke="#f97316" stroke-width="1.8" fill="none" marker-end="url(#aOrange)"/>
+  <rect x="395" y="1004" width="280" height="18" rx="3" ry="3" fill="#0f0f1a" opacity="0.95"/>
+  <text x="400" y="1017" class="msg" fill="#fdba74">[17] data: {type:'publish'} → 铃铛+1</text>
+
+  <!-- NOTE: filter by sid -->
+  <rect x="200" y="1045" width="900" height="34" rx="4" ry="4" fill="#1e1b4b" stroke="#a855f7" stroke-width="1" opacity="0.95"/>
+  <text x="650" y="1067" class="note" text-anchor="middle" fill="#e9d5ff">💡 StreamService 按 sid 过滤 — 同一个 topic 多个订阅者，各自只收到自己的消息</text>
+
+  <!-- Footer -->
+  <text x="60" y="1160" class="sub" fill="#475569">▌Pattern A · NATS-decoupled SSE  ·  这是 NATS 真正价值的体现（解耦 + 一对多）  ·  ⌁ fireworks-tech-graph</text>
+</svg>
